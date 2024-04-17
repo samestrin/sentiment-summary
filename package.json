@@ -2,7 +2,7 @@
   "name": "sentiment-summary",
   "version": "0.0.1",
   "description": "The sentiment-summary module generates summaries from larger bodies of text taking sentence level sentiment into consideration.",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "jest"
   },
