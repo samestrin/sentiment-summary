@@ -54,7 +54,7 @@ function sentimentSummary(
     if (sentiment >= positiveSentimentThreshold) {
       sentimentRankAdjustment = positiveRankBoost * sentiment;
     } else if (sentiment <= negativeSentimentThreshold) {
-      sentimentRankAdjustment = Math.abs(negativeRankBoost) * sentiment;
+      sentimentRankAdjustment = negativeRankBoost * sentiment;
     }
 
     return {
