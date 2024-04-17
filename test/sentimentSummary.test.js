@@ -1,4 +1,4 @@
-const { sentimentSummary } = require("../src");
+const { sentimentSummary } = require("../src/index");
 
 describe("sentimentSummary", () => {
   test("generates correct summary", () => {
