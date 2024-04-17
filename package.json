@@ -4,7 +4,7 @@
   "description": "The sentiment-summary module generates summaries from larger bodies of text taking sentence level sentiment into consideration.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -27,9 +27,9 @@
   },
   "homepage": "https://github.com/samestrin/sentiment-summary#readme",
   "dependencies": {
-    "textrank-node": "^0.1.9"
+    "natural": "^7.0.5"
   },
-  "scripts": {
-    "test": "jest"
+  "devDependencies": {
+    "jest": "^27.0.0"
   }
 }

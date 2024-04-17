@@ -38,14 +38,14 @@ Three arrest warrants have been issued for others in Canada.
 
 `;
 
-    let summary = sentimentSummary(text, 5, 1.5, 1);
+    let summary = sentimentSummary(text, 5, 1.5, 1, 5, 0);
     expect(summary).toContain(
-      `So far, police have recovered C$90,000 of 'pure gold', fashioned into six 'crudely made' bracelets.`
+      `Canadian police have made arrests and issued nine warrants in the largest gold theft in the country's history.`
     );
 
-    summary = sentimentSummary(text, 5, 0.5, 1);
+    summary = sentimentSummary(text, 5, 1, 0.25, 0, 5);
     expect(summary).toContain(
-      `"One of those firearms had an obliterated serial number, 11 of them were stolen, and two of them were converted into fully automatic machine guns," said Eric Degree, a special agent of the ATF in Philadelphia.`
+      `They also seized smelting pots, casts and moulds, as well as C$430,000 in cash that police said were the profits of gold sales.`
     );
   });
 });
