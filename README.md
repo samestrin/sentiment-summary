@@ -1,4 +1,14 @@
-The sentiment-summary module generates summaries from larger bodies of text taking sentence level sentiment into consideration.
+# Sentiment Summary
+
+The sentiment-summary module generates summaries from larger bodies of text taking sentence level sentiment into consideration. A modified TextRank algorithm is used.
+
+## Installation
+
+```bash
+npm install sentiment-summary
+```
+
+## Usage
 
 ```javascript
 const { sentimentSummary } = require("sentiment-summary");
@@ -16,13 +26,19 @@ Police said the "Netflix-series"-style heist was executed by a "well-organised g
 The investigation is ongoing.`;
 
 let numberOfSentences = 5;
-let sentimentThreshold = 0.5;
-let rankBoost = 2;
+let positiveSentimentThreshold = 1;
+let negativeSentimentThreshold = -1;
+let positiveRankBoost = 2;
+let negativeRankBoost = 1;
 
 let summary = sentimentSummary(
   text,
   numberOfSentences,
-  sentimentThreshold,
-  rankBoost
+  positiveSentimentThreshold,
+  negativeSentimentThreshold,
+  positiveRankBoost,
+  negativeRankBoost
 );
+
+console.log(summary);
 ```
