@@ -10,25 +10,11 @@ const {
 // Create an instance of SentenceTokenizer
 const tokenizer = new SentenceTokenizer();
 
-const text = `GloRilla found herself in a jail cell this week after cops busted her for DUI -- and she apparently had a wardrobe malfunction while this all went down ... TMZ has learned.
-
-According to a police report, obtained by TMZ, the rapper was arrested and booked early Tuesday morning on suspicion of driving under the influence, consuming/possessing an open alcoholic beverage container and a separate traffic charge in Gwinnett County, GA.
-
-She was hauled into jail around 6:12 AM ET and bonded out a few hours later. Her booking info, obtained by TMZ, notes that one of her aliases is Hallelujah ... which is her legal middle name.
-
-As for what exactly happened here -- cops say they saw a vehicle making a U-turn at a solid red traffic light around 4 AM ET, so they pulled the vehicle over to see what was what.
-
-The officer who took the report claims he smelled marijuana and alcohol emanating from the car, and claims GloRilla told him she'd been drinking that evening ... but, he explains she wouldn't say how much she'd consumed, and insisted she was good to drive.
-
-The police say they then administered a field sobriety test -- which they claim GloRilla was shaky on, especially staying on her feet. They put her through the wringer, it seems -- making her do the eye-follow test, the walk-and-turn, one-leg balance, walk-in-a-straight-line, etc.    
-
-On just about all of them ... the cops claim she bombed. Finally, they got to the breathalyzer ... which the police claim she refused to submit to. During this whole back and forth, the cop says GloRilla's breast slipped out from under her clothes -- which he had to tell her about.
-
-In the end, GloRilla got arrested -- and cops say an associate came to pick up her vehicle.    
-
-What's interesting is that GloRilla herself hasn't shown any indication she ran into legal trouble. Her IG is full of people twerking their asses to her and Megan Thee Stallion's new 'Wanna Be' song. So, business as usual in other words.
-
-We've reached out to GloRilla ... so far, no word back.`;
+const text = `Canine Companions: The Joys and Challenges of Dog Ownership
+Dogs, often referred to as "man's best friend," have earned their place by our side for millennia. Their loyalty, playful nature, and companionship bring immense joy to countless homes. However, owning a dog is a significant commitment that shouldn't be taken lightly.  Between chewed furniture, barking complaints from neighbors, and the ever-present need for walks, there can be a fair share of challenges that come with sharing your life with a canine companion.
+Despite the hurdles, the positive aspects of dog ownership far outweigh the difficulties. Studies have shown that dogs can reduce stress and anxiety, while promoting exercise and an active lifestyle. Their unconditional love and enthusiasm for life is truly infectious. Owning a dog can also foster a sense of responsibility and routine, especially for children.
+The right breed selection can significantly impact your experience. High-energy breeds like Border Collies require ample stimulation and activity, while more laid-back breeds like Pugs are content with shorter walks and couch cuddles.  Researching different breeds and their needs is crucial for finding a furry friend that complements your lifestyle.
+Ultimately, the decision to get a dog is a personal one. By carefully considering your lifestyle and weighing the potential drawbacks against the undeniable rewards, you can determine if a furry friend is the perfect addition to your life.`;
 
 describe("sentimentTextRankSummary", () => {
   test("generates correct summary positive sentiment", () => {
