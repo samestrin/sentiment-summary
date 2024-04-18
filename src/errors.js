@@ -54,8 +54,8 @@ function manageErrors(
       "Invalid negativeRankBoost (Not a number or outside of range)"
     );
   }
-  if (lambda && (typeof lambda !== "number" || lambda < 0 || lambda > 1)) {
-    throw new Error("Invalid lambda (Not a number or out of range [0,1])");
+  if (lambda && typeof lambda !== "number") {
+    throw new Error("Invalid lambda (Not a number)");
   }
 }
 module.exports = { manageErrors };
