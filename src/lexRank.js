@@ -5,7 +5,7 @@ const TfIdf = natural.TfIdf;
 const { manageErrors } = require("./errors.js");
 const {
   getSentimentRankAdjustment,
-  calculateAdjustedRanked,
+  calculateAdjustedRank,
   getTfIdfVectors,
   cosineSimilarity,
 } = require("./shared.js");
@@ -65,7 +65,7 @@ function sentimentLexRankSummary(
     return {
       ...details,
       sentiment: sentimentScore,
-      rank: calculateAdjustedRanked(details.rank, sentimentRankAdjustment),
+      rank: calculateAdjustedRank(details.rank, sentimentRankAdjustment),
     };
   });
 

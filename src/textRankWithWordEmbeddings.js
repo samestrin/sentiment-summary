@@ -5,7 +5,7 @@ const { manageErrors } = require("./errors.js");
 
 const {
   getSentimentRankAdjustment,
-  calculateAdjustedRanked,
+  calculateAdjustedRank,
   cosineSimilarity,
   getWordEmbeddings,
 } = require("./shared.js");
@@ -78,7 +78,7 @@ async function sentimentTextRankWithWordEmbeddingsSummary(
     );
     return {
       sentence,
-      rank: calculateAdjustedRanked(
+      rank: calculateAdjustedRank(
         sentenceScores[index],
         sentimentRankAdjustment
       ),

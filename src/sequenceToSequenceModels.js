@@ -6,7 +6,7 @@ const { manageErrors } = require("./errors.js");
 const { loadModel } = require("./loadModel");
 const {
   getSentimentRankAdjustment,
-  calculateAdjustedRanked,
+  calculateAdjustedRank,
 } = require("./shared.js");
 /**
  * Generates a summary from a given text using the pre-trained ALBERT Seq2Seq model,
@@ -115,7 +115,7 @@ function textRankWithSentimentScores(
     return {
       ...details,
       sentiment: sentimentScore,
-      rank: calculateAdjustedRanked(details.rank, sentimentRankAdjustment),
+      rank: calculateAdjustedRank(details.rank, sentimentRankAdjustment),
     };
   });
 }

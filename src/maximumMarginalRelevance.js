@@ -5,7 +5,7 @@ const vader = require("vader-sentiment");
 const { manageErrors } = require("./errors.js");
 const {
   getSentimentRankAdjustment,
-  calculateAdjustedRanked,
+  calculateAdjustedRank,
   getTfIdfVectors,
   cosineSimilarity,
 } = require("./shared.js");
@@ -72,7 +72,7 @@ function sentimentMMRSummary(
       positiveRankBoost,
       negativeRankBoost
     );
-    return calculateAdjustedRanked(score, sentimentAdjustment);
+    return calculateAdjustedRank(score, sentimentAdjustment);
   });
 
   let summary = [];

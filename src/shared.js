@@ -94,7 +94,7 @@ function cosineSimilarity(vecA, vecB) {
     : dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
-function calculateAdjustedRanked(rank = 0, sentimentRankAdjustment = 0) {
+function calculateAdjustedRank(rank = 0, sentimentRankAdjustment = 0) {
   return rank + sentimentRankAdjustment;
 }
 
@@ -104,5 +104,5 @@ module.exports = {
   getTfIdfVectors,
   getTfIdfMatrix,
   cosineSimilarity,
-  calculateAdjustedRanked,
+  calculateAdjustedRank,
 };

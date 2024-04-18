@@ -5,7 +5,7 @@ const svd = require("svd-js");
 const { manageErrors } = require("./errors.js");
 const {
   getSentimentRankAdjustment,
-  calculateAdjustedRanked,
+  calculateAdjustedRank,
   getTfIdfMatrix,
 } = require("./shared.js");
 
@@ -69,7 +69,7 @@ function sentimentLSASummary(
     return {
       sentence,
       sentiment: sentimentScore,
-      rank: calculateAdjustedRanked(
+      rank: calculateAdjustedRank(
         sentenceScores[index],
         sentimentRankAdjustment
       ),
