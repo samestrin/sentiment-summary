@@ -35,6 +35,7 @@
   },
   "homepage": "https://github.com/samestrin/sentiment-summary#readme",
   "dependencies": {
+    "@tensorflow/tfjs-node": "^4.18.0",
     "fasttext": "^1.0.0",
     "natural": "^7.0.5",
     "svd-js": "^1.1.1",
