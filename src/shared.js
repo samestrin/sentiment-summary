@@ -1,5 +1,28 @@
-function calculateAdjustedRanked(rank = 0, sentimentRankAdjustment = 0) {
-  return rank + sentimentRankAdjustment;
+const tf = require("@tensorflow/tfjs-node");
+const tokenizer =
+  require("@tensorflow/tfjs-node/dist/ops/utils.js").node.nlp.BertTokenizer.fromStaticData();
+const { loadModel } = require("./loadModel");
+
+// Load the model
+const model = await loadModel();
+
+/**
+ * Get word embeddings for each word in a sentence using ALBERT.
+ * @param {string} sentence - The sentence to process.
+ * @returns {Promise<Array>} A promise that resolves to an array of vectors, one for each word.
+ */
+async function getWordEmbeddings(sentence) {
+  // Tokenize the input sentence
+  const tokens = tokenizer.tokenize(sentence);
+  const inputIds = tokenizer.buildInputIds(tokens);
+
+  // Pass the tokens to the model and get the output
+  const output = model.execute({ input_ids: tf.tensor([inputIds]) });
+
+  // Extract the word embeddings from the model output
+  const wordEmbeddings = output[0].arraySync()[0];
+
+  return wordEmbeddings;
 }
 
 function getSentimentRankAdjustment(
@@ -71,7 +94,12 @@ function cosineSimilarity(vecA, vecB) {
     : dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
+function calculateAdjustedRanked(rank = 0, sentimentRankAdjustment = 0) {
+  return rank + sentimentRankAdjustment;
+}
+
 module.exports = {
+  getWordEmbeddings,
   getSentimentRankAdjustment,
   getTfIdfVectors,
   getTfIdfMatrix,
