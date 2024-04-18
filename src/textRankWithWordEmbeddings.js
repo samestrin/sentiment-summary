@@ -2,12 +2,12 @@ const natural = require("natural");
 const SentenceTokenizer = natural.SentenceTokenizer;
 const vader = require("vader-sentiment");
 const { manageErrors } = require("./errors.js");
-const { getWordEmbeddings } = require("./getWordEmbeddingsGloVe.js");
 
 const {
   getSentimentRankAdjustment,
   calculateAdjustedRanked,
   cosineSimilarity,
+  getWordEmbeddings,
 } = require("./shared.js");
 
 /**
@@ -23,7 +23,7 @@ const {
  *
  * @returns {string} A string that concatenates the top-ranked sentences to form the summary.
  */
-function sentimentTextRankSummary(
+async function sentimentTextRankWithWordEmbeddingsSummary(
   text,
   numberOfSentences = 5,
   positiveSentimentThreshold = 0,
@@ -96,4 +96,4 @@ function sentimentTextRankSummary(
     .join(" ");
 }
 
-module.exports = { sentimentTextRankSummary };
+module.exports = { sentimentTextRankWithWordEmbeddingsSummary };
