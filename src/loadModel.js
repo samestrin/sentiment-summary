@@ -11,6 +11,7 @@ const defaultModelUrl =
 
 // Load and cache the default model
 let model;
+
 const loadModel = async () => {
   if (!model) {
     model = await tf.node.loadCachedModel(defaultModelUrl, {

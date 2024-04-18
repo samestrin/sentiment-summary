@@ -1,12 +1,11 @@
 const natural = require("natural");
 const TfIdf = natural.TfIdf;
-const tokenizer = new natural.WordTokenizer();
 const SentenceTokenizer = natural.SentenceTokenizer;
 const vader = require("vader-sentiment");
 const { manageErrors } = require("./errors.js");
 const {
   getSentimentRankAdjustment,
-  calculateAdjustedRanked,
+  calculateAdjustedRank,
   getTfIdfVectors,
   cosineSimilarity,
 } = require("./shared.js");
@@ -77,19 +76,19 @@ function sentimentTextRankSummary(
     return {
       ...details,
       sentiment: sentimentScore,
-      rank: calculateAdjustedRanked(details.rank, sentimentRankAdjustment),
+      rank: calculateAdjustedRank(details.rank, sentimentRankAdjustment),
     };
   });
 
   // Sort sentences by the modified rank
   sentenceDetails.sort((a, b) => b.rank - a.rank);
-  //console.log(sentenceDetails);
+
   // Select the top N sentences and return them as a single string
   let summary = sentenceDetails
     .slice(0, numberOfSentences)
     .map((details) => details.sentence)
     .join(" ");
-  //  console.log(summary);
+  console.log(summary);
   return summary;
 }
 
