@@ -48,6 +48,32 @@ describe("sentimentExtractiveSummary", () => {
   });
 });
 
+describe("sentimentExtractiveWeightedSummary", () => {
+  test("generates correct summary positive sentiment", () => {
+    let summary = sentimentExtractiveWeightedSummary(text, 5, 0.5, 0, 0.9, 0);
+    console.log(summary);
+    expect(summary).toContain(`In the end, GloRilla got arrested`);
+  });
+
+  test("generates correct number of sentences for positive sentiment", () => {
+    let summary = sentimentExtractiveWeightedSummary(text, 5, 0.5, 0, 0.9, 0);
+    let sentences = tokenizer.tokenize(summary);
+    expect(sentences).toHaveLength(5);
+  });
+
+  test("generates correct summary negative sentiment", () => {
+    let summary = sentimentExtractiveWeightedSummary(text, 5, 0.5, -1, -1, 1);
+    console.log(summary);
+    expect(summary).toContain(`suspicion of driving under the influence`);
+  });
+
+  test("generates correct number of sentences for negative sentiment", () => {
+    let summary = sentimentExtractiveWeightedSummary(text, 5, 0.5, -1, -1, 1);
+    let sentences = tokenizer.tokenize(summary);
+    expect(sentences).toHaveLength(5);
+  });
+});
+
 describe("sentimentLSASummary", () => {
   test("generates correct summary positive sentiment", () => {
     let summary = sentimentLSASummary(text, 5, 0.5, 0, 0.9, 0);

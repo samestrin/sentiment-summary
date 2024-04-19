@@ -75,7 +75,7 @@ function calculateKeywordFrequencyScore(sentence, keywords) {
  * @throws {Error} If any input parameters are invalid.
  */
 
-async function titleWordMatchingSummary(
+async function sentimentExtractiveWeightedSummary(
   text,
   numberOfSentences = 5,
   positiveSentimentThreshold = 0,
@@ -148,4 +148,4 @@ async function titleWordMatchingSummary(
   return summary;
 }
 
-module.exports = { titleWordMatchingSummary };
+module.exports = { sentimentExtractiveWeightedSummary };
