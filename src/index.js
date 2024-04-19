@@ -12,7 +12,12 @@ const {
   sentimentTextRankWithWordEmbeddingsSummary,
 } = require("./functions/textRankWithWordEmbeddings.js");
 
-async function sentimentSummary(text, options = {}) {}
+async function sentimentSummary(text, options = {}) {
+  // check the global config and assign out variables
+  // check the options and assign out variables, overwriting existing
+  // run summarization using the specified summarization and sentiment analysis engines respectively
+  // return the results
+}
 
 module.exports = {
   sentimentExtractiveSummary,
