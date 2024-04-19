@@ -39,7 +39,17 @@ TextRank is another graph-based summarization method similar to LexRank. However
 
 This approach combines the TextRank algorithm with word embeddings, which are dense vector representations of words that capture semantic and syntactic information. Instead of using co-occurrence relationships between words, this method computes sentence similarity using word embeddings. Sentences are represented as vectors by averaging or combining the word embeddings of their constituent words. The TextRank algorithm then operates on these sentence vectors to identify the most important sentences for the summary.
 
-## Hugging Face Support
+## Installation
+
+```bash
+npm install sentiment-summary
+```
+
+## Usage
+
+@todo pending major update
+
+### Hugging Face Support
 
 This module comes pre-configured with 24 Hugging Face models that can be used with the Hugging Face sentiment analysis engine. They are grouped into 6 categories:
 
@@ -92,16 +102,6 @@ async function main() {
 
 main();
 ```
-
-## Installation
-
-```bash
-npm install sentiment-summary
-```
-
-## Usage
-
-@todo pending major update
 
 ## Documentation
 
