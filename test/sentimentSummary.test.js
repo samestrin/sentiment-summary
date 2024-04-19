@@ -7,6 +7,7 @@ const {
   sentimentLexRankSummary,
   sentimentExtractiveSummary,
   sentimentLSASummary,
+  sentimentMMRSummary,
 } = require("../src/index.js");
 
 // Create an instance of SentenceTokenizer
@@ -21,7 +22,6 @@ Ultimately, getting a dog is a personal decision. By carefully considering your 
 describe("sentimentExtractiveSummary", () => {
   test("generates correct summary positive sentiment", () => {
     let summary = sentimentExtractiveSummary(text, 5, 0.5, 0, 0.9, 0);
-
     expect(summary).toContain(
       `Their unconditional love mends hearts and fills lives with laughter.`
     );
@@ -35,14 +35,13 @@ describe("sentimentExtractiveSummary", () => {
 
   test("generates correct summary negative sentiment", () => {
     let summary = sentimentExtractiveSummary(text, 5, 0.5, -1, -1, 1);
-
     expect(summary).toContain(
       `Some folks might tell you dog ownership is a nightmare.`
     );
   });
 
   test("generates correct number of sentences for negative sentiment", () => {
-    let summary = sentimentExtractiveSummary(text, 5, 0, -0.5, 0, -0.9);
+    let summary = sentimentExtractiveSummary(text, 5, 0.5, -1, -1, 1);
     let sentences = tokenizer.tokenize(summary);
     expect(sentences).toHaveLength(5);
   });
@@ -51,7 +50,6 @@ describe("sentimentExtractiveSummary", () => {
 describe("sentimentLSASummary", () => {
   test("generates correct summary positive sentiment", () => {
     let summary = sentimentLSASummary(text, 5, 0.5, 0, 0.9, 0);
-    console.log(summary);
     expect(summary).toContain(
       `Their unconditional love mends hearts and fills lives with laughter.`
     );
@@ -65,14 +63,71 @@ describe("sentimentLSASummary", () => {
 
   test("generates correct summary negative sentiment", () => {
     let summary = sentimentLSASummary(text, 5, 0.5, -1, -1, 1);
-    console.log(summary);
     expect(summary).toContain(
       `Some folks might tell you dog ownership is a nightmare.`
     );
   });
 
   test("generates correct number of sentences for negative sentiment", () => {
-    let summary = sentimentLSASummary(text, 5, 0, -0.5, 0, -0.9);
+    let summary = sentimentLSASummary(text, 5, 0.5, -1, -1, 1);
+    let sentences = tokenizer.tokenize(summary);
+    expect(sentences).toHaveLength(5);
+  });
+});
+
+describe("sentimentLexRankSummary", () => {
+  test("generates correct summary positive sentiment", () => {
+    let summary = sentimentLexRankSummary(text, 5, 0.5, 0, 0.9, 0);
+    expect(summary).toContain(
+      `Their unconditional love mends hearts and fills lives with laughter.`
+    );
+  });
+
+  test("generates correct number of sentences for positive sentiment", () => {
+    let summary = sentimentLexRankSummary(text, 5, 0.5, 0, 0.9, 0);
+    let sentences = tokenizer.tokenize(summary);
+    expect(sentences).toHaveLength(5);
+  });
+
+  test("generates correct summary negative sentiment", () => {
+    let summary = sentimentLexRankSummary(text, 5, 0.5, -1, -1, 1);
+    expect(summary).toContain(
+      `Some folks might tell you dog ownership is a nightmare.`
+    );
+  });
+
+  test("generates correct number of sentences for negative sentiment", () => {
+    let summary = sentimentLexRankSummary(text, 5, 0.5, -1, -1, 1);
+    let sentences = tokenizer.tokenize(summary);
+    expect(sentences).toHaveLength(5);
+  });
+});
+
+describe("sentimentMMRSummary", () => {
+  test("generates correct summary positive sentiment", () => {
+    let summary = sentimentMMRSummary(text, 5, 0.5, 0.75, 0, 1, 0);
+    console.log(summary);
+    expect(summary).toContain(
+      `Their unconditional love mends hearts and fills lives with laughter.`
+    );
+  });
+
+  test("generates correct number of sentences for positive sentiment", () => {
+    let summary = sentimentMMRSummary(text, 5, 0.5, 0.5, 0, 0.9, 0);
+    let sentences = tokenizer.tokenize(summary);
+    expect(sentences).toHaveLength(5);
+  });
+
+  test("generates correct summary negative sentiment", () => {
+    let summary = sentimentMMRSummary(text, 5, 0.5, 0.5, -1, -1, 1);
+    console.log(summary);
+    expect(summary).toContain(
+      `Rude awakenings become the norm as your furry alarm clock nudges you for a pre-dawn bathroom break.`
+    );
+  });
+
+  test("generates correct number of sentences for negative sentiment", () => {
+    let summary = sentimentMMRSummary(text, 5, 0.5, 0.5, -1, -1, 1);
     let sentences = tokenizer.tokenize(summary);
     expect(sentences).toHaveLength(5);
   });
@@ -105,31 +160,5 @@ describe("sentimentTextRankSummary", () => {
   });
 });
 
-describe("sentimentLexRankSummary", () => {
-  test("generates correct summary positive sentiment", () => {
-    let summary = sentimentLexRankSummary(text, 5, 0.25, 0, 0.75, 0);
-    console.log(summary);
-    expect(summary).toContain(
-      `she apparently had a wardrobe malfunction while this all went down`
-    );
-  });
 
-  test("generates correct number of sentences for positive sentiment", () => {
-    let summary = sentimentLexRankSummary(text, 5, 0.25, 0, 0.75, 0);
-    let sentences = tokenizer.tokenize(summary);
-    expect(sentences).toHaveLength(5);
-  });
-
-  test("generates correct summary negative sentiment", () => {
-    let summary = sentimentLexRankSummary(text, 5, 0, -0.25, 0, -0.75);
-    console.log(summary);
-    expect(summary).toContain(`suspicion of driving under the influence`);
-  });
-
-  test("generates correct number of sentences for negative sentiment", () => {
-    let summary = sentimentLexRankSummary(text, 5, 0, -0.25, 0, -0.75);
-    let sentences = tokenizer.tokenize(summary);
-    expect(sentences).toHaveLength(5);
-  });
-});
 */

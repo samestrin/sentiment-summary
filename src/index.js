@@ -1,8 +1,15 @@
-const { sentimentTextRankSummary } = require("./textRank.js");
-const { sentimentLexRankSummary } = require("./lexRank.js");
-const { sentimentSeq2SeqSummary } = require("./sequenceToSequenceModels.js");
-const { sentimentExtractiveSummary } = require("./extractiveText.js");
-const { sentimentLSASummary } = require("./latentSemanticAnalysis.js");
+const { sentimentTextRankSummary } = require("./functions/textRank.js");
+const { sentimentLexRankSummary } = require("./functions/lexRank.js");
+const {
+  sentimentSeq2SeqSummary,
+} = require("./functions/sequenceToSequenceModels.js");
+const { sentimentExtractiveSummary } = require("./functions/extractiveText.js");
+const {
+  sentimentLSASummary,
+} = require("./functions/latentSemanticAnalysis.js");
+const {
+  sentimentMMRSummary,
+} = require("./functions/maximumMarginalRelevance.js");
 
 module.exports = {
   sentimentTextRankSummary,
@@ -10,4 +17,5 @@ module.exports = {
   sentimentSeq2SeqSummary,
   sentimentExtractiveSummary,
   sentimentLSASummary,
+  sentimentMMRSummary,
 };

@@ -82,12 +82,13 @@ function sentimentLexRankSummary(
 function lexRankSentences(sentences) {
   let tfidf = new TfIdf();
   sentences.forEach((sentence) => tfidf.addDocument(sentence));
-  let vectors = getTfIdfVectors(tfidf);
+  let vectors = getTfIdfVectors(tfidf); // Ensure this returns a proper list of vectors
 
   // Compute the cosine similarity matrix
   let similarityMatrix = vectors.map((vecA) =>
     vectors.map((vecB) => cosineSimilarity(vecA, vecB))
   );
+
   let threshold = calculateThreshold(similarityMatrix);
 
   // Apply threshold to similarity matrix and calculate degrees
@@ -101,6 +102,9 @@ function lexRankSentences(sentences) {
       return 0;
     })
   );
+
+  // Check if any degrees are zero and adjust them to avoid division by zero
+  degrees = degrees.map((degree) => (degree === 0 ? 1 : degree));
 
   // Use power method to approximate principal eigenvector
   let ranks = powerMethod(similarityMatrix, degrees, 0.85, 100);
@@ -118,9 +122,9 @@ function calculateThreshold(similarityMatrix) {
 
 function powerMethod(matrix, degrees, damping = 0.85, maxIter = 100) {
   let N = matrix.length;
-  let p = Array(N).fill(1 / N);
+  let p = Array(N).fill(1 / N); // Start with an equal probability for each node
   for (let iter = 0; iter < maxIter; iter++) {
-    let newP = Array(N).fill(1 - damping);
+    let newP = Array(N).fill((1 - damping) / N); // Ensure the random teleportation is uniformly distributed
     for (let i = 0; i < N; i++) {
       for (let j = 0; j < N; j++) {
         newP[i] += ((damping * matrix[j][i]) / degrees[j]) * p[j];

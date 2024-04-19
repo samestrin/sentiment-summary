@@ -72,9 +72,12 @@ function sentimentMMRSummary(
       positiveRankBoost,
       negativeRankBoost
     );
-    return calculateAdjustedRank(score, sentimentAdjustment);
-  });
 
+    let adjustedRank = calculateAdjustedRank(score, sentimentAdjustment);
+
+    return adjustedRank;
+  });
+  console.log(relevanceScores);
   let summary = [];
   let selectedIndices = new Set();
 
