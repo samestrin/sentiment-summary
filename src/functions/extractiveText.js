@@ -91,6 +91,7 @@ function calculateKeywordFrequencyScore(sentence, keywords) {
  * const summary = await sentimentExtractiveSummary(review, 2);
  * console.log(summary); // Output: "This product is amazing! I would highly recommend it."
  */
+
 async function sentimentExtractiveSummary(
   text,
   numberOfSentences = 5,

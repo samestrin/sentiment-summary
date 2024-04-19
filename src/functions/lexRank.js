@@ -18,19 +18,24 @@ const {
 const { getSentiment } = require("./sentiment.js");
 
 /**
- * Generates a summary from a given text by ranking sentences based on their LexRank score adjusted by their sentiment.
- * LexRank is a graph-based method for determining key sentences in the text by ranking them according to their centrality in the sentence similarity graph.
- * This function integrates sentiment analysis to adjust the ranks based on the emotional content of the sentences, emphasizing sentences with significant positive or negative sentiments.
+ * Generates a sentiment-aware summary using the LexRank algorithm. Prioritizes sentences with strong positive or negative sentiment.
  *
- * @param {string} text - The input text from which the summary is generated.
- * @param {number} numberOfSentences - The number of top-ranked sentences to include in the summary (default is 5).
- * @param {number} positiveSentimentThreshold - The threshold above which a positive sentiment score triggers a rank boost (default is 0).
- * @param {number} negativeSentimentThreshold - The threshold below which a negative sentiment score triggers a rank boost (default is 0).
- * @param {number} positiveRankBoost - The multiplier applied to the base LexRank score for sentences with positive sentiments above the threshold (default is 0).
- * @param {number} negativeRankBoost - The multiplier applied to the base LexRank score for sentences with negative sentiments below the threshold (default is 0).
+ * @param {string} text - The input text for summarization.
+ * @param {number} [numberOfSentences=5] -  Desired number of sentences in the summary.
+ * @param {number} [positiveSentimentThreshold=0] - Minimum sentiment score to consider a sentence positive.
+ * @param {number} [negativeSentimentThreshold=0] - Maximum sentiment score to consider a sentence negative.
+ * @param {number} [positiveRankBoost=0] - Boost applied to the ranking of positive sentences.
+ * @param {number} [negativeRankBoost=0] - Boost applied to the ranking of negative sentences.
+ * @returns {string} The generated summary.
+ * @throws {Error} If any input parameters are invalid (delegated to 'manageErrors').
  *
- * @returns {string} A string that concatenates the top-ranked sentences to form the summary.
+ * @example
+ *
+ * const review = "The food was delicious! The service was slow, but overall it was a great experience.";
+ * const summary = await sentimentLexRankSummary(review, 2);
+ * console.log(summary);
  */
+
 async function sentimentLexRankSummary(
   text,
   numberOfSentences = 5,
@@ -85,6 +90,15 @@ async function sentimentLexRankSummary(
     .join(" ");
 }
 
+/**
+ * Computes LexRank scores for sentences to determine their importance within a text.
+ *
+ * @param {string[]} sentences - An array of sentences from the input text.
+ * @returns {object[]} Array of objects, each containing:
+ *   * sentence: The original sentence.
+ *   * rank: The calculated LexRank importance score.
+ */
+
 function lexRankSentences(sentences) {
   let tfidf = new TfIdf();
   sentences.forEach((sentence) => tfidf.addDocument(sentence));
@@ -121,10 +135,27 @@ function lexRankSentences(sentences) {
   }));
 }
 
+/**
+ * Calculates a similarity threshold for building the LexRank graph.
+ *
+ * @param {number[][]} similarityMatrix - A matrix representing the cosine similarities between sentences.
+ * @returns {number} The average similarity score, used as a threshold.
+ */
+
 function calculateThreshold(similarityMatrix) {
   let scores = similarityMatrix.flat();
   return scores.reduce((a, b) => a + b, 0) / scores.length;
 }
+
+/**
+ * Approximates the principal eigenvector (representing sentence importance) of a graph using the power iteration method.
+ *
+ * @param {number[][]} matrix -  Represents a graph, often an adjacency or similarity matrix.
+ * @param {number[]} degrees  - Represents the out-degrees of each node in the graph.
+ * @param {number} [damping=0.85]  - Damping factor to prevent oscillations (probability of a 'random jump').
+ * @param {number} [maxIter=100] -  Maximum number of iterations for convergence.
+ * @returns {number[]}  An array of scores approximating the importance of each node (sentence).
+ */
 
 function powerMethod(matrix, degrees, damping = 0.85, maxIter = 100) {
   let N = matrix.length;

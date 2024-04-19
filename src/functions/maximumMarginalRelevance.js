@@ -50,11 +50,10 @@ async function sentimentMMRSummary(
   );
 
   const sentenceTokenizer = new SentenceTokenizer();
-  let sentences = sentenceTokenizer.tokenize(text);
-
-  let tfidf = new TfIdf();
+  const sentences = sentenceTokenizer.tokenize(text);
+  const tfidf = new TfIdf();
   sentences.forEach((sentence) => tfidf.addDocument(sentence));
-  let vectors = getTfIdfVectors(tfidf);
+  const vectors = getTfIdfVectors(tfidf);
 
   // Compute initial relevance scores based on TF-IDF cosine similarity with the whole document
   let docVector = vectors.reduce((acc, vec) => {
@@ -67,22 +66,24 @@ async function sentimentMMRSummary(
   let relevanceScores = vectors.map((vec) => cosineSimilarity(vec, docVector));
 
   // Compute sentiment scores and adjust initial relevance
-  relevanceScores = relevanceScores.map((score, index) => {
-    const sentimentScore = async getSentiment(sentences[index])
+  const sentimentAdjustments = await Promise.all(
+    sentences.map((sentence, index) =>
+      getSentiment(sentence).then((sentimentScore) => {
+        return getSentimentRankAdjustment(
+          sentimentScore,
+          positiveSentimentThreshold,
+          negativeSentimentThreshold,
+          positiveRankBoost,
+          negativeRankBoost
+        );
+      })
+    )
+  );
 
-    const sentimentAdjustment = getSentimentRankAdjustment(
-      sentimentScore,
-      positiveSentimentThreshold,
-      negativeSentimentThreshold,
-      positiveRankBoost,
-      negativeRankBoost
-    );
+  relevanceScores = relevanceScores.map((score, index) =>
+    calculateAdjustedRank(score, sentimentAdjustments[index])
+  );
 
-    let adjustedRank = calculateAdjustedRank(score, sentimentAdjustment);
-
-    return adjustedRank;
-  });
-  console.log(relevanceScores);
   let summary = [];
   let selectedIndices = new Set();
 
