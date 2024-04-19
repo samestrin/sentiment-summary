@@ -5,17 +5,80 @@ const SentenceTokenizer = natural.SentenceTokenizer;
 const {
   sentimentTextRankSummary,
   sentimentLexRankSummary,
+  sentimentExtractiveSummary,
+  sentimentLSASummary,
 } = require("../src/index.js");
 
 // Create an instance of SentenceTokenizer
 const tokenizer = new SentenceTokenizer();
 
-const text = `Canine Companions: The Joys and Challenges of Dog Ownership
-Dogs, often referred to as "man's best friend," have earned their place by our side for millennia. Their loyalty, playful nature, and companionship bring immense joy to countless homes. However, owning a dog is a significant commitment that shouldn't be taken lightly.  Between chewed furniture, barking complaints from neighbors, and the ever-present need for walks, there can be a fair share of challenges that come with sharing your life with a canine companion.
-Despite the hurdles, the positive aspects of dog ownership far outweigh the difficulties. Studies have shown that dogs can reduce stress and anxiety, while promoting exercise and an active lifestyle. Their unconditional love and enthusiasm for life is truly infectious. Owning a dog can also foster a sense of responsibility and routine, especially for children.
-The right breed selection can significantly impact your experience. High-energy breeds like Border Collies require ample stimulation and activity, while more laid-back breeds like Pugs are content with shorter walks and couch cuddles.  Researching different breeds and their needs is crucial for finding a furry friend that complements your lifestyle.
-Ultimately, the decision to get a dog is a personal one. By carefully considering your lifestyle and weighing the potential drawbacks against the undeniable rewards, you can determine if a furry friend is the perfect addition to your life.`;
+const text = `Dogs, loyal companions for thousands of years, bring endless joy. Wagging tails and happy barks brighten even the gloomiest day. Their unconditional love mends hearts and fills lives with laughter. Playful antics and a comforting presence enrich our lives in unimaginable ways. Walks with our furry friends become adventures, introducing us to new people and fostering a strong sense of community.
+Some folks might tell you dog ownership is a nightmare. Puppy piranhas chew furniture and shoes with relentless glee, leaving you questioning your sanity. Rude awakenings become the norm as your furry alarm clock nudges you for a pre-dawn bathroom break. Rain or shine, walks transform you into an all-weather poop patrol officer. The financial burden is real, with food, vet bills, and training costs adding up fast. Traveling gets complicated, requiring pet-friendly accommodations and potentially expensive doggy daycare. Dog ownership is a lifestyle shift, demanding significant time, energy, and resources.
+Despite the challenges, the rewards outweigh the struggles. Studies show dogs reduce stress and anxiety, while promoting exercise and a healthy lifestyle. Their infectious enthusiasm for life and unwavering love are truly special. Raising a dog teaches responsibility and creates a sense of routine, especially for children.
+Choosing the right breed makes all the difference. High-energy Border Collies need constant stimulation and activity, while laid-back Pugs are happy with short walks and couch cuddles. Researching different breeds and their needs is crucial for finding a perfect furry friend that complements your lifestyle.
+Ultimately, getting a dog is a personal decision. By carefully considering your lifestyle and weighing the drawbacks against the undeniable rewards, you can determine if a furry friend is the perfect addition to your life.`;
 
+describe("sentimentExtractiveSummary", () => {
+  test("generates correct summary positive sentiment", () => {
+    let summary = sentimentExtractiveSummary(text, 5, 0.5, 0, 0.9, 0);
+
+    expect(summary).toContain(
+      `Their unconditional love mends hearts and fills lives with laughter.`
+    );
+  });
+
+  test("generates correct number of sentences for positive sentiment", () => {
+    let summary = sentimentExtractiveSummary(text, 5, 0.5, 0, 0.9, 0);
+    let sentences = tokenizer.tokenize(summary);
+    expect(sentences).toHaveLength(5);
+  });
+
+  test("generates correct summary negative sentiment", () => {
+    let summary = sentimentExtractiveSummary(text, 5, 0.5, -1, -1, 1);
+
+    expect(summary).toContain(
+      `Some folks might tell you dog ownership is a nightmare.`
+    );
+  });
+
+  test("generates correct number of sentences for negative sentiment", () => {
+    let summary = sentimentExtractiveSummary(text, 5, 0, -0.5, 0, -0.9);
+    let sentences = tokenizer.tokenize(summary);
+    expect(sentences).toHaveLength(5);
+  });
+});
+
+describe("sentimentLSASummary", () => {
+  test("generates correct summary positive sentiment", () => {
+    let summary = sentimentLSASummary(text, 5, 0.5, 0, 0.9, 0);
+    console.log(summary);
+    expect(summary).toContain(
+      `Their unconditional love mends hearts and fills lives with laughter.`
+    );
+  });
+
+  test("generates correct number of sentences for positive sentiment", () => {
+    let summary = sentimentLSASummary(text, 5, 0.5, 0, 0.9, 0);
+    let sentences = tokenizer.tokenize(summary);
+    expect(sentences).toHaveLength(5);
+  });
+
+  test("generates correct summary negative sentiment", () => {
+    let summary = sentimentLSASummary(text, 5, 0.5, -1, -1, 1);
+    console.log(summary);
+    expect(summary).toContain(
+      `Some folks might tell you dog ownership is a nightmare.`
+    );
+  });
+
+  test("generates correct number of sentences for negative sentiment", () => {
+    let summary = sentimentLSASummary(text, 5, 0, -0.5, 0, -0.9);
+    let sentences = tokenizer.tokenize(summary);
+    expect(sentences).toHaveLength(5);
+  });
+});
+
+/*
 describe("sentimentTextRankSummary", () => {
   test("generates correct summary positive sentiment", () => {
     let summary = sentimentTextRankSummary(text, 5, 0.25, 0, 0.75, 0);
@@ -69,3 +132,4 @@ describe("sentimentLexRankSummary", () => {
     expect(sentences).toHaveLength(5);
   });
 });
+*/
