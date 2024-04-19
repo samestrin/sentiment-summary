@@ -59,12 +59,41 @@ models = getModels();
 console.log(models);
 ```
 
+If you'd prefer to use a custom model, you can use the global configuration object or the options object argument and set:
+
+```javascript
+const { setup } = require("sentiment-summary");
+
+setup({
+  sentimentEngine: "hugging-face",
+  sentimentEngineModel: yourDesiredModel,
+});
+
+async function main() {
+  let summary = async sentimentSummary(text)
+}
+
+```
+
+or
+
+```javascript
+const { sentimentSummary } = require("sentiment-summary");
+
+async function main() {
+  let summary = async sentimentSummary(text,
+  {
+    sentimentEngine: "hugging-face",
+    sentimentEngineModel: yourDesiredModel,
+  });
+}
+
+```
+
 ## Installation
 
 ```bash
-
 npm install sentiment-summary
-
 ```
 
 ## Usage
