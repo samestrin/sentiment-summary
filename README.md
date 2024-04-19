@@ -62,7 +62,9 @@ console.log(models);
 ## Installation
 
 ```bash
+
 npm install sentiment-summary
+
 ```
 
 ## Usage
