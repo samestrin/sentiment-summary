@@ -1,7 +1,8 @@
 const natural = require("natural");
+
 const SentenceTokenizer = natural.SentenceTokenizer;
 const vader = require("vader-sentiment");
-const svd = require("svd-js");
+const numeric = require("numeric");
 const { manageErrors } = require("./errors.js");
 const {
   getSentimentRankAdjustment,
@@ -48,10 +49,10 @@ function sentimentLSASummary(
   const { matrix, terms } = getTfIdfMatrix(sentences);
 
   // Perform SVD
-  const { u, s, v } = svd.svd(matrix);
+  const { U, S, V } = numeric.svd(matrix);
 
   // We use the diagonal S matrix to rank sentences based on their singular values
-  const sentenceScores = v[0].map((_, i) => s[i] * s[i]);
+  const sentenceScores = V[0].map((_, i) => S[i] * S[i]);
 
   // Compute sentiments and adjust ranks
   let sentenceDetails = sentences.map((sentence, index) => {
