@@ -6,9 +6,7 @@ const { sentimentLexRankSummary } = require("./functions/lexRank.js");
 const {
   sentimentMMRSummary,
 } = require("./functions/maximumMarginalRelevance.js");
-const {
-  sentimentSeq2SeqSummary,
-} = require("./functions/sequenceToSequenceModels.js");
+
 const { sentimentTextRankSummary } = require("./functions/textRank.js");
 const {
   sentimentTextRankWithWordEmbeddingsSummary,

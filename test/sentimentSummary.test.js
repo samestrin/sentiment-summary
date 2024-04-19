@@ -107,7 +107,6 @@ describe("sentimentLexRankSummary", () => {
 describe("sentimentMMRSummary", () => {
   test("generates correct summary positive sentiment", () => {
     let summary = sentimentMMRSummary(text, 5, 0.5, 0.75, 0, 1, 0);
-    console.log(summary);
     expect(summary).toContain(
       `Their unconditional love mends hearts and fills lives with laughter.`
     );
@@ -121,7 +120,6 @@ describe("sentimentMMRSummary", () => {
 
   test("generates correct summary negative sentiment", () => {
     let summary = sentimentMMRSummary(text, 5, 0.5, 0.5, -1, -1, 1);
-    console.log(summary);
     expect(summary).toContain(
       `Rude awakenings become the norm as your furry alarm clock nudges you for a pre-dawn bathroom break.`
     );
@@ -129,36 +127,6 @@ describe("sentimentMMRSummary", () => {
 
   test("generates correct number of sentences for negative sentiment", () => {
     let summary = sentimentMMRSummary(text, 5, 0.5, 0.5, -1, -1, 1);
-    let sentences = tokenizer.tokenize(summary);
-    expect(sentences).toHaveLength(5);
-  });
-});
-
-describe("sentimentSeq2SeqSummary", () => {
-  test("generates correct summary positive sentiment", () => {
-    let summary = sentimentSeq2SeqSummary(text, 5, 5, 0.75, 0, 1, 0);
-    console.log(summary);
-    expect(summary).toContain(
-      `Their unconditional love mends hearts and fills lives with laughter.`
-    );
-  });
-
-  test("generates correct number of sentences for positive sentiment", () => {
-    let summary = sentimentSeq2SeqSummary(text, 5, 5, 0.5, 0, 0.9, 0);
-    let sentences = tokenizer.tokenize(summary);
-    expect(sentences).toHaveLength(5);
-  });
-
-  test("generates correct summary negative sentiment", () => {
-    let summary = sentimentSeq2SeqSummary(text, 5, 5, 0.5, -1, -1, 1);
-    console.log(summary);
-    expect(summary).toContain(
-      `Rude awakenings become the norm as your furry alarm clock nudges you for a pre-dawn bathroom break.`
-    );
-  });
-
-  test("generates correct number of sentences for negative sentiment", () => {
-    let summary = sentimentSeq2SeqSummary(text, 5, 5, 0.5, -1, -1, 1);
     let sentences = tokenizer.tokenize(summary);
     expect(sentences).toHaveLength(5);
   });

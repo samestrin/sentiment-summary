@@ -1,7 +1,12 @@
+/* Maximum Marginal Relevance (MMR) for Text Summarization:
+MMR is a technique that aims to produce summaries that are both relevant to the original text and diverse in content.
+It iteratively selects sentences that have high relevance to the document but minimal redundancy with sentences already included in the summary.
+MMR strikes a balance between relevance and diversity, resulting in summaries that cover the main topics while minimizing repetition.
+*/
+
 const natural = require("natural");
 const TfIdf = natural.TfIdf;
 const SentenceTokenizer = natural.SentenceTokenizer;
-const vader = require("vader-sentiment");
 const { manageErrors } = require("./errors.js");
 const {
   getSentimentRankAdjustment,
@@ -9,6 +14,7 @@ const {
   getTfIdfVectors,
   cosineSimilarity,
 } = require("./shared.js");
+const { getSentiment } = require("./sentiment.js");
 
 /**
  * Generates a summary from a given text by ranking sentences based on their Maximum Marginal Relevance (MMR) score adjusted by their sentiment.
@@ -24,7 +30,7 @@ const {
  *
  * @returns {string} A string that concatenates the top-ranked sentences to form the summary.
  */
-function sentimentMMRSummary(
+async function sentimentMMRSummary(
   text,
   numberOfSentences = 5,
   lambda = 0.7,
@@ -62,9 +68,8 @@ function sentimentMMRSummary(
 
   // Compute sentiment scores and adjust initial relevance
   relevanceScores = relevanceScores.map((score, index) => {
-    const sentimentScore = vader.SentimentIntensityAnalyzer.polarity_scores(
-      sentences[index]
-    ).compound;
+    const sentimentScore = async getSentiment(sentences[index])
+
     const sentimentAdjustment = getSentimentRankAdjustment(
       sentimentScore,
       positiveSentimentThreshold,

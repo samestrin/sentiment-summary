@@ -1,6 +1,6 @@
 const tf = require("@tensorflow/tfjs-node");
 const { BertTokenizer } = require("@tensorflow/tfjs-node");
-const { loadModel } = require("./loadModel");
+const { loadModel } = require("./models");
 const stopwords = require("natural").stopwords;
 const TfIdf = require("natural").TfIdf;
 

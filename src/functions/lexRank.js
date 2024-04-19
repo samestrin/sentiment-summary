@@ -1,6 +1,12 @@
+/* LexRank for Text Summarization:
+LexRank is a graph-based summarization method inspired by the PageRank algorithm used in web search engines.
+It constructs a graph representation of the text, where vertices represent sentences, and edges represent semantic similarity between sentences.
+The algorithm then computes a centrality score for each sentence, indicating its importance within the text.
+Highly scored sentences are selected to form the summary, capturing the most salient information.
+*/
+
 const natural = require("natural");
 const SentenceTokenizer = natural.SentenceTokenizer;
-const vader = require("vader-sentiment");
 const TfIdf = natural.TfIdf;
 const { manageErrors } = require("./errors.js");
 const {
@@ -9,6 +15,8 @@ const {
   getTfIdfVectors,
   cosineSimilarity,
 } = require("./shared.js");
+const { getSentiment } = require("./sentiment.js");
+
 /**
  * Generates a summary from a given text by ranking sentences based on their LexRank score adjusted by their sentiment.
  * LexRank is a graph-based method for determining key sentences in the text by ranking them according to their centrality in the sentence similarity graph.
@@ -23,7 +31,7 @@ const {
  *
  * @returns {string} A string that concatenates the top-ranked sentences to form the summary.
  */
-function sentimentLexRankSummary(
+async function sentimentLexRankSummary(
   text,
   numberOfSentences = 5,
   positiveSentimentThreshold = 0,
@@ -31,7 +39,6 @@ function sentimentLexRankSummary(
   positiveRankBoost = 0,
   negativeRankBoost = 0
 ) {
-  // throw errors if invalid input values are passed
   manageErrors(
     text,
     numberOfSentences,
@@ -41,39 +48,38 @@ function sentimentLexRankSummary(
     negativeRankBoost
   );
 
-  // Create an instance of SentenceTokenizer
+  // Tokenize the text into sentences
   const sentenceTokenizer = new SentenceTokenizer();
   let sentences = sentenceTokenizer.tokenize(text);
 
   // Calculate LexRank scores
   let sentenceDetails = lexRankSentences(sentences);
 
-  // Compute sentiments and adjust ranks
-  sentenceDetails = sentenceDetails.map((details) => {
-    let sentimentScore = vader.SentimentIntensityAnalyzer.polarity_scores(
-      details.sentence
-    ).compound;
+  // Compute sentiments and adjust ranks asynchronously
+  const sentimentDetails = await Promise.all(
+    sentenceDetails.map(async (details) => {
+      const sentimentScore = await getSentiment(details.sentence);
 
-    let sentimentRankAdjustment = getSentimentRankAdjustment(
-      sentimentScore,
-      positiveSentimentThreshold,
-      negativeSentimentThreshold,
-      positiveRankBoost,
-      negativeRankBoost
-    );
+      const sentimentRankAdjustment = getSentimentRankAdjustment(
+        sentimentScore,
+        positiveSentimentThreshold,
+        negativeSentimentThreshold,
+        positiveRankBoost,
+        negativeRankBoost
+      );
 
-    return {
-      ...details,
-      sentiment: sentimentScore,
-      rank: calculateAdjustedRank(details.rank, sentimentRankAdjustment),
-    };
-  });
+      return {
+        ...details,
+        rank: calculateAdjustedRank(details.rank, sentimentRankAdjustment),
+      };
+    })
+  );
 
   // Sort sentences by the modified rank
-  sentenceDetails.sort((a, b) => b.rank - a.rank);
+  sentimentDetails.sort((a, b) => b.rank - a.rank);
 
   // Select the top N sentences and return them as a single string
-  return sentenceDetails
+  return sentimentDetails
     .slice(0, numberOfSentences)
     .map((details) => details.sentence)
     .join(" ");

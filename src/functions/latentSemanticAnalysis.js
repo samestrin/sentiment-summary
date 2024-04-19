@@ -1,7 +1,12 @@
-const natural = require("natural");
+/* Latent Semantic Analysis (LSA) for Text Summarization:
+LSA is a technique that analyzes the relationships between a set of documents and the terms they contain.
+It constructs a semantic space where documents and terms are represented as vectors.
+In the context of text summarization, LSA can identify the most important sentences or passages that capture the core meaning and topics of the original text.
+It achieves this by finding the sentences with the highest semantic similarity to the overall document vector.
+*/
 
+const natural = require("natural");
 const SentenceTokenizer = natural.SentenceTokenizer;
-const vader = require("vader-sentiment");
 const numeric = require("numeric");
 const { manageErrors } = require("./errors.js");
 const {
@@ -9,22 +14,29 @@ const {
   calculateAdjustedRank,
   getTfIdfMatrix,
 } = require("./shared.js");
+const { getSentiment } = require("./sentiment.js");
 
 /**
- * Generates a summary from a given text by ranking sentences based on their LSA score adjusted by their sentiment.
- * LSA uses singular value decomposition on a term-document matrix to identify patterns in the relationships between the terms and concepts in the text.
- * Sentiments of sentences are evaluated to boost their importance based on emotional content.
+ * Generates a sentiment-aware summary using Latent Semantic Analysis (LSA).
+ * Emphasizes sentences with strong positive or negative sentiments.
  *
- * @param {string} text - The input text from which the summary is generated.
- * @param {number} numberOfSentences - The number of top-ranked sentences to include in the summary (default is 5).
- * @param {number} positiveSentimentThreshold - The threshold above which a positive sentiment score triggers a rank boost (default is 0.1).
- * @param {number} negativeSentimentThreshold - The threshold below which a negative sentiment score triggers a rank boost (default is -0.1).
- * @param {number} positiveRankBoost - The multiplier applied to the base LSA score for sentences with positive sentiments above the threshold (default is 2).
- * @param {number} negativeRankBoost - The multiplier applied to the base LSA score for sentences with negative sentiments below the threshold (default is 2).
+ * @param {string} text - The input text for summarization.
+ * @param {number} [numberOfSentences=5] -  Desired number of sentences in the summary.
+ * @param {number} [positiveSentimentThreshold=0.1] - Minimum sentiment score to consider a sentence positive.
+ * @param {number} [negativeSentimentThreshold=-0.1] - Maximum sentiment score to consider a sentence negative.
+ * @param {number} [positiveRankBoost=2] - Boost applied to the ranking of positive sentences.
+ * @param {number} [negativeRankBoost=2] - Boost applied to the ranking of negative sentences.
+ * @returns {string} The generated summary.
+ * @throws {Error} If any input parameters are invalid.
  *
- * @returns {string} A string that concatenates the top-ranked sentences to form the summary.
+ * @example
+ *
+ * const article = "The new movie was terrible! The plot was confusing, and the acting was subpar. However, I really enjoyed the special effects.";
+ * const summary = await sentimentLSASummary(article, 3);
+ * console.log(summary);
  */
-function sentimentLSASummary(
+
+async function sentimentLSASummary(
   text,
   numberOfSentences = 5,
   positiveSentimentThreshold = 0.1,
@@ -32,7 +44,6 @@ function sentimentLSASummary(
   positiveRankBoost = 2,
   negativeRankBoost = 2
 ) {
-  // throw errors if invalid input values are passed
   manageErrors(
     text,
     numberOfSentences,
@@ -51,31 +62,31 @@ function sentimentLSASummary(
   // Perform SVD
   const { U, S, V } = numeric.svd(matrix);
 
-  // We use the diagonal S matrix to rank sentences based on their singular values
-  const sentenceScores = V[0].map((_, i) => S[i] * S[i]);
+  // Use the singular values to rank sentences
+  const sentenceScores = S.map((s, i) => s * s);
 
-  // Compute sentiments and adjust ranks
-  let sentenceDetails = sentences.map((sentence, index) => {
-    const sentimentScore =
-      vader.SentimentIntensityAnalyzer.polarity_scores(sentence).compound;
+  // Compute sentiments and adjust ranks asynchronously
+  const sentenceDetails = await Promise.all(
+    sentences.map(async (sentence, index) => {
+      const sentimentScore = await getSentiment(sentence);
 
-    let sentimentRankAdjustment = getSentimentRankAdjustment(
-      sentimentScore,
-      positiveSentimentThreshold,
-      negativeSentimentThreshold,
-      positiveRankBoost,
-      negativeRankBoost
-    );
+      const sentimentRankAdjustment = getSentimentRankAdjustment(
+        sentimentScore,
+        positiveSentimentThreshold,
+        negativeSentimentThreshold,
+        positiveRankBoost,
+        negativeRankBoost
+      );
 
-    return {
-      sentence,
-      sentiment: sentimentScore,
-      rank: calculateAdjustedRank(
-        sentenceScores[index],
-        sentimentRankAdjustment
-      ),
-    };
-  });
+      return {
+        sentence,
+        rank: calculateAdjustedRank(
+          sentenceScores[index],
+          sentimentRankAdjustment
+        ),
+      };
+    })
+  );
 
   // Sort sentences by the modified rank
   sentenceDetails.sort((a, b) => b.rank - a.rank);
