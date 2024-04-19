@@ -1,18 +1,23 @@
 const tf = require("@tensorflow/tfjs-node");
-const tokenizer =
-  require("@tensorflow/tfjs-node/dist/ops/utils.js").node.nlp.BertTokenizer.fromStaticData();
+const { BertTokenizer } = require("@tensorflow/tfjs-node");
 const { loadModel } = require("./loadModel");
+const stopwords = require("natural").stopwords;
+const TfIdf = require("natural").TfIdf;
 
-// Load the model
-const model = await loadModel();
-
+let model;
 /**
  * Get word embeddings for each word in a sentence using ALBERT.
  * @param {string} sentence - The sentence to process.
  * @returns {Promise<Array>} A promise that resolves to an array of vectors, one for each word.
  */
 async function getWordEmbeddings(sentence) {
+  // Load the model
+  model = await loadModel();
+
   // Tokenize the input sentence
+
+  const tokenizer = BertTokenizer.fromStaticData();
+
   const tokens = tokenizer.tokenize(sentence);
   const inputIds = tokenizer.buildInputIds(tokens);
 
@@ -55,26 +60,55 @@ function getTfIdfVectors(tfidf) {
   return vectors;
 }
 
-const natural = require("natural");
-const TfIdf = natural.TfIdf;
+function preprocessDocument(document) {
+  // Lowercase, remove non-alphabet characters, split into words, filter stopwords and short words
+  return document
+    .toLowerCase()
+    .replace(/[^a-z\s]/gi, "")
+    .split(/\s+/)
+    .filter((word) => word.length > 1 && !stopwords.includes(word));
+}
 
-function getTfIdfMatrix(documents) {
+function getTfIdfMatrix(documents, minDocFrequency = 0) {
   const tfidf = new TfIdf();
-  documents.forEach((doc) => tfidf.addDocument(doc));
-  const matrix = [];
-  const terms = [];
+  documents
+    .map(preprocessDocument)
+    .forEach((doc) => tfidf.addDocument(doc.join(" "))); // Join words for TfIdf
 
-  // Assuming the first document includes all terms, this needs adaptation for larger, diverse corpora
-  for (let term in tfidf.documents[0]) {
-    if (!isNaN(term)) continue; // Skip term indices
-    terms.push(term);
-    const termColumn = [];
-    for (let i = 0; i < documents.length; i++) {
-      termColumn.push(tfidf.tfidf(term, i));
-    }
-    matrix.push(termColumn);
-  }
-  return { matrix: matrix.map((_, i) => matrix.map((row) => row[i])), terms };
+  let terms = new Set();
+  tfidf.documents.forEach((doc) => {
+    Object.keys(doc).forEach((term) => {
+      if (!isNaN(term)) return; // Skip numeric indices
+      terms.add(term);
+    });
+  });
+
+  terms = Array.from(terms);
+
+  // Building the term-document matrix with terms as rows
+  const matrix = terms.map((term) => {
+    return documents.map((_, i) => tfidf.tfidf(term, i));
+  });
+
+  // Filter matrix and terms based on document frequency
+  const filteredMatrix = matrix.filter((row, idx) => {
+    const docFrequency =
+      row.filter((value) => value > 0).length / documents.length;
+    return docFrequency >= minDocFrequency;
+  });
+  const filteredTerms = terms.filter((_, idx) => {
+    const row = matrix[idx];
+    const docFrequency =
+      row.filter((value) => value > 0).length / documents.length;
+    return docFrequency >= minDocFrequency;
+  });
+
+  // Debug to check term frequencies
+  filteredTerms.forEach((term, idx) => {
+    const count = filteredMatrix[idx].filter((value) => value > 0).length;
+  });
+
+  return { matrix: filteredMatrix, terms: filteredTerms }; // Return the untransposed filtered matrix
 }
 
 function cosineSimilarity(vecA, vecB) {
@@ -95,7 +129,7 @@ function cosineSimilarity(vecA, vecB) {
 }
 
 function calculateAdjustedRank(rank = 0, sentimentRankAdjustment = 0) {
-  return rank + sentimentRankAdjustment;
+  return rank + rank * sentimentRankAdjustment;
 }
 
 module.exports = {
