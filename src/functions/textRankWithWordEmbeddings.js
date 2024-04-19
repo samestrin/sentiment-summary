@@ -14,7 +14,7 @@ const {
   cosineSimilarity,
   getWordEmbeddings,
 } = require("./shared.js");
-const { getSentiment } = require("./sentiment.js");
+const { getSentiment } = require("./sentimentAnalysis.js");
 
 /**
  * Generates a sentiment-aware summary using TextRank with word embeddings. Emphasizes sentences with semantically important words and strong sentiment.

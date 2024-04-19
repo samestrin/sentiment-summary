@@ -15,7 +15,7 @@ const {
   getTfIdfVectors,
   cosineSimilarity,
 } = require("./shared.js");
-const { getSentiment } = require("./sentiment.js");
+const { getSentiment } = require("./sentimentAnalysis.js");
 
 /**
  * Generates a sentiment-aware summary using the LexRank algorithm. Prioritizes sentences with strong positive or negative sentiment.

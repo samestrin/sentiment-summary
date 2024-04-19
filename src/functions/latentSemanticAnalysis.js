@@ -14,7 +14,7 @@ const {
   calculateAdjustedRank,
   getTfIdfMatrix,
 } = require("./shared.js");
-const { getSentiment } = require("./sentiment.js");
+const { getSentiment } = require("./sentimentAnalysis.js");
 
 /**
  * Generates a sentiment-aware summary using Latent Semantic Analysis (LSA).

@@ -11,7 +11,7 @@ const {
   getSentimentRankAdjustment,
   calculateAdjustedRank,
 } = require("./shared.js");
-const { getSentiment } = require("./sentiment.js");
+const { getSentiment } = require("./sentimentAnalysis.js");
 
 /**
  * Extracts the most relevant keywords from a given text.
