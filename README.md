@@ -73,6 +73,8 @@ async function main() {
   let summary = async sentimentSummary(text)
 }
 
+main();
+
 ```
 
 or
@@ -88,6 +90,7 @@ async function main() {
   });
 }
 
+main();
 ```
 
 ## Installation
