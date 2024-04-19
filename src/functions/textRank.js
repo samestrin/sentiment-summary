@@ -1,3 +1,10 @@
+/* TextRank for Text Summarization:
+TextRank is another graph-based summarization method similar to LexRank.
+However, instead of using semantic similarity between sentences, TextRank uses co-occurrence relationships between words or phrases to construct the graph.
+Vertices represent words or phrases, and edges represent co-occurrence links between them.
+The algorithm computes a centrality score for each word or phrase, and sentences containing the highest-ranked words or phrases are selected for the summary.
+*/
+
 const natural = require("natural");
 const { manageErrors } = require("./errors.js");
 const {
@@ -7,6 +14,25 @@ const {
   cosineSimilarity,
 } = require("./shared.js");
 const { getSentiment } = require("./sentiment.js");
+
+/**
+ * Generates a sentiment-aware summary using the TextRank algorithm. Prioritizes sentences containing important words/phrases and those with strong sentiments.
+ *
+ * @param {string} text - The input text for summarization.
+ * @param {number} [numberOfSentences=5] -  Desired number of sentences in the summary.
+ * @param {number} [positiveSentimentThreshold=0] - Minimum sentiment score to consider a sentence positive.
+ * @param {number} [negativeSentimentThreshold=0] - Maximum sentiment score to consider a sentence negative.
+ * @param {number} [positiveRankBoost=0] - Boost applied to the ranking of positive sentences.
+ * @param {number} [negativeRankBoost=0] - Boost applied to the ranking of negative sentences.
+ * @returns {string} The generated summary.
+ * @throws {Error} If any input parameters are invalid (delegated to 'manageErrors').
+ *
+ * @example
+ *
+ * const review = "The scenery was beautiful but the hotel room was cramped. I really enjoyed the food though!";
+ * const summary = await sentimentTextRankSummary(review, 2);
+ * console.log(summary);
+ */
 
 async function sentimentTextRankSummary(
   text,

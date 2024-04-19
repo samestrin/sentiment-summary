@@ -17,19 +17,26 @@ const {
 const { getSentiment } = require("./sentiment.js");
 
 /**
- * Generates a summary from a given text by ranking sentences based on their Maximum Marginal Relevance (MMR) score adjusted by their sentiment.
- * MMR aims to reduce redundancy and improve the diversity of the sentences in the summary while considering the sentiment of sentences to emphasize emotional content.
+ * Generates a sentiment-aware summary using the Maximum Marginal Relevance (MMR) algorithm.
+ * Emphasizes sentences with strong sentiment while ensuring diversity in the summary.
  *
- * @param {string} text - The input text from which the summary is generated.
- * @param {number} numberOfSentences - The number of top-ranked sentences to include in the summary (default is 5).
- * @param {number} lambda - The trade-off parameter between relevance and diversity (range [0,1]).
- * @param {number} positiveSentimentThreshold - The threshold above which a positive sentiment score triggers a rank boost.
- * @param {number} negativeSentimentThreshold - The threshold below which a negative sentiment score triggers a rank boost.
- * @param {number} positiveRankBoost - The multiplier for positive sentiment impact on ranking.
- * @param {number} negativeRankBoost - The multiplier for negative sentiment impact on ranking.
+ * @param {string} text - The input text for summarization.
+ * @param {number} [numberOfSentences=5] -  Desired number of sentences in the summary.
+ * @param {number} [lambda=0.7] -  Balances relevance and diversity in summary (higher lambda prioritizes relevance).
+ * @param {number} [positiveSentimentThreshold=0] - Minimum sentiment score to consider a sentence positive.
+ * @param {number} [negativeSentimentThreshold=0] - Maximum sentiment score to consider a sentence negative.
+ * @param {number} [positiveRankBoost=0] - Boost applied to the ranking of positive sentences.
+ * @param {number} [negativeRankBoost=0] - Boost applied to the ranking of negative sentences.
+ * @returns {string} The generated summary.
+ * @throws {Error} If any input parameters are invalid (delegated to 'manageErrors').
  *
- * @returns {string} A string that concatenates the top-ranked sentences to form the summary.
+ * @example
+ *
+ * const article = "The product has innovative features and works well. However, it is quite expensive, and the customer support could be better.";
+ * const summary = await sentimentMMRSummary(article, 3);
+ * console.log(summary);
  */
+
 async function sentimentMMRSummary(
   text,
   numberOfSentences = 5,

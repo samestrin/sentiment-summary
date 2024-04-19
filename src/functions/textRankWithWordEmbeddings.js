@@ -1,28 +1,40 @@
+/* TextRank with Word Embeddings for Text Summarization:
+
+This approach combines the TextRank algorithm with word embeddings, which are dense vector representations of words that capture semantic and syntactic information.
+Instead of using co-occurrence relationships between words, this method computes sentence similarity using word embeddings.
+Sentences are represented as vectors by averaging or combining the word embeddings of their constituent words.
+The TextRank algorithm then operates on these sentence vectors to identify the most important sentences for the summary.
+*/
 const natural = require("natural");
 const SentenceTokenizer = natural.SentenceTokenizer;
-const vader = require("vader-sentiment");
 const { manageErrors } = require("./errors.js");
-
 const {
   getSentimentRankAdjustment,
   calculateAdjustedRank,
   cosineSimilarity,
   getWordEmbeddings,
 } = require("./shared.js");
+const { getSentiment } = require("./sentiment.js");
 
 /**
- * Generates a summary from a given text by ranking sentences based on their TextRank score using word embeddings adjusted by their sentiment.
- * This function integrates the use of TextRank enhanced by word embeddings for better semantic understanding and sentiment analysis to adjust these ranks based on emotional content.
+ * Generates a sentiment-aware summary using TextRank with word embeddings. Emphasizes sentences with semantically important words and strong sentiment.
  *
- * @param {string} text - The input text from which the summary is generated.
- * @param {number} numberOfSentences - The number of top-ranked sentences to include in the summary (default is 5).
- * @param {number} positiveSentimentThreshold - The threshold above which a positive sentiment score triggers a rank boost.
- * @param {number} negativeSentimentThreshold - The threshold below which a negative sentiment score triggers a rank boost.
- * @param {number} positiveRankBoost - The multiplier applied to the base TextRank score for sentences with positive sentiments above the threshold.
- * @param {number} negativeRankBoost - The multiplier applied to the base TextRank score for sentences with negative sentiments below the threshold.
+ * @param {string} text - The input text for summarization.
+ * @param {number} [numberOfSentences=5] -  Desired number of sentences in the summary.
+ * @param {number} [positiveSentimentThreshold=0] - Minimum sentiment score to consider a sentence positive.
+ * @param {number} [negativeSentimentThreshold=0] - Maximum sentiment score to consider a sentence negative.
+ * @param {number} [positiveRankBoost=0] - Boost applied to the ranking of positive sentences.
+ * @param {number} [negativeRankBoost=0] - Boost applied to the ranking of negative sentences.
+ * @returns {string} The generated summary.
+ * @throws {Error} If any input parameters are invalid (delegated to 'manageErrors').
  *
- * @returns {string} A string that concatenates the top-ranked sentences to form the summary.
+ * @example
+ *
+ * const article = "The new technology is amazing but expensive. I love the design of the product!";
+ * const summary = await sentimentTextRankWithWordEmbeddingsSummary(article, 2);
+ * console.log(summary);
  */
+
 async function sentimentTextRankWithWordEmbeddingsSummary(
   text,
   numberOfSentences = 5,
@@ -67,8 +79,8 @@ async function sentimentTextRankWithWordEmbeddingsSummary(
 
   // Compute sentiments and adjust ranks
   let sentenceDetails = sentences.map((sentence, index) => {
-    const sentimentScore =
-      vader.SentimentIntensityAnalyzer.polarity_scores(sentence).compound;
+    const sentimentScore = getSentiment(sentence);
+
     const sentimentRankAdjustment = getSentimentRankAdjustment(
       sentimentScore,
       positiveSentimentThreshold,
