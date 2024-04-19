@@ -12,12 +12,13 @@ const {
   sentimentTextRankWithWordEmbeddingsSummary,
 } = require("./functions/textRankWithWordEmbeddings.js");
 
+async function sentimentSummary(text, options = {}) {}
+
 module.exports = {
   sentimentExtractiveSummary,
   sentimentLSASummary,
   sentimentLexRankSummary,
   sentimentMMRSummary,
-  sentimentSeq2SeqSummary,
   sentimentTextRankSummary,
   sentimentTextRankWithWordEmbeddingsSummary,
 };
