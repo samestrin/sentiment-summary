@@ -7,6 +7,24 @@ const {
   calculateAdjustedRank,
 } = require("./shared.js");
 
+// Function to extract keywords from the text
+function extractKeywords(text, numKeywords = 10) {
+  const allWords = text.toLowerCase().split(" ");
+  const filteredWords = allWords.filter((word) => !stopwords.includes(word));
+
+  const wordFrequencies = {};
+  filteredWords.forEach((word) => {
+    wordFrequencies[word] = (wordFrequencies[word] || 0) + 1;
+  });
+
+  // Sort keywords by frequency (descending)
+  const sortedKeywords = Object.keys(wordFrequencies).sort(
+    (a, b) => wordFrequencies[b] - wordFrequencies[a]
+  );
+
+  return sortedKeywords.slice(0, numKeywords);
+}
+
 // Function to calculate keyword frequency scores
 function calculateKeywordFrequencyScore(sentence, keywords) {
   const words = sentence.split(" ");
@@ -29,8 +47,7 @@ function sentimentExtractiveSummary(
   positiveSentimentThreshold = 0,
   negativeSentimentThreshold = 0,
   positiveRankBoost = 0,
-  negativeRankBoost = 0,
-  keywords
+  negativeRankBoost = 0
 ) {
   // Error handling
   manageErrors(
@@ -45,45 +62,64 @@ function sentimentExtractiveSummary(
   const sentenceTokenizer = new natural.SentenceTokenizer();
   const sentences = sentenceTokenizer.tokenize(text);
 
+  // Extract keywords from the entire input text
+  const keywords = extractKeywords(text);
+
   // Calculate keyword frequency scores and track original positions
-  let sentenceDetails = sentences.map((sentence, index) => {
-    const keywordFrequencyScore = calculateKeywordFrequencyScore(
-      sentence,
-      keywords
-    );
-    const sentimentScore =
-      vader.SentimentIntensityAnalyzer.polarity_scores(sentence).compound;
-    const sentimentRankAdjustment = getSentimentRankAdjustment(
-      sentimentScore,
-      positiveSentimentThreshold,
-      negativeSentimentThreshold,
-      positiveRankBoost,
-      negativeRankBoost
-    );
+  let sentenceDetails = sentences
+    .map((sentence, index) => {
+      if (sentence.trim()) {
+        // Ensure the sentence has content
+        const keywordFrequencyScore = calculateKeywordFrequencyScore(
+          sentence,
+          keywords
+        );
+        const sentimentScore =
+          vader.SentimentIntensityAnalyzer.polarity_scores(sentence).compound;
 
-    return {
-      sentence,
-      index,
-      sentiment: sentimentScore,
-      rank: calculateAdjustedRank(
-        keywordFrequencyScore,
-        sentimentRankAdjustment
-      ),
-    };
-  });
+        const sentimentRankAdjustment = getSentimentRankAdjustment(
+          sentimentScore,
+          positiveSentimentThreshold,
+          negativeSentimentThreshold,
+          positiveRankBoost,
+          negativeRankBoost
+        );
+        return {
+          sentence,
+          index,
+          sentiment: sentimentScore,
+          rank: calculateAdjustedRank(
+            keywordFrequencyScore,
+            sentimentRankAdjustment
+          ),
+          keywordFrequencyScore,
+          sentimentRankAdjustment,
+          positiveSentimentThreshold,
+          negativeSentimentThreshold,
+          positiveRankBoost,
+          negativeRankBoost,
+        };
+      } else {
+        return null; // Return null for empty or whitespace-only sentences
+      }
+    })
+    .filter((item) => item !== null); // Filter out null entries
 
-  // Sort by adjusted rank
+  // Sort by adjusted rank to get the top sentences
   sentenceDetails.sort((a, b) => b.rank - a.rank);
 
-  // Build summary while maintaining original order
-  const summarySentences = [];
-  for (let i = 0; i < numberOfSentences; i++) {
-    const topSentenceDetails = sentenceDetails[i];
-    summarySentences[topSentenceDetails.index] = topSentenceDetails.sentence;
-  }
-  const summary = summarySentences.join(" ");
+  // Select the top N sentences as per numberOfSentences, maintaining their original order
+  const topSentences = sentenceDetails.slice(0, numberOfSentences);
 
-  console.log(summary);
+  // Sort these top sentences back into their original order
+  topSentences.sort((a, b) => a.index - b.index);
+
+  // Map to just the sentences, already trimmed
+  const summarySentences = topSentences.map((detail) => detail.sentence.trim());
+
+  // Join all selected sentences into a single summary string
+  const summary = summarySentences.join(" ").trim();
+
   return summary;
 }
 
