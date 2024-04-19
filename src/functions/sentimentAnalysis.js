@@ -23,7 +23,7 @@ let classifier;
  * @param {string} text - The input text to analyze.
  * @param {string} [engine="vader"] - The engine to use. Options include:
  *   * 'vader', 'hugging-face', 'sentiment'(AFINN-165), 'wink-sentiment',
- *   * 'sentiment-analysis' (AFINN-111), 'natural', 'ml-sentiment'
+ *   * 'sentiment-analysis' (AFINN-111), 'natural'
  * @param {string} [model=""] -  Name of the Hugging Face model (if 'hugging-face' engine selected).
  * @returns {number} A sentiment score between -1 (most negative) and 1 (most positive).
  */
@@ -42,7 +42,7 @@ async function getSentiment(text, engine = "vader", model = "") {
 
     case "sentiment":
     case "AFINN-165":
-      sentimentScore = getSentiment(text);
+      sentimentScore = getSentimentNPM(text);
       break;
 
     case "wink-sentiment":
@@ -126,7 +126,7 @@ function getVader(text) {
  * @returns {number}  A sentiment score between -1 (most negative) and 1 (most positive).
  */
 
-function getSentiment(text) {
+function getSentimentNPM(text) {
   const sentiment = new Sentiment();
   const result = sentiment.analyze(text);
   // Normalizing the score to be between -1 and 1
