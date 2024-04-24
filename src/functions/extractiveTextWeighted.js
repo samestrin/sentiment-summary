@@ -1,9 +1,9 @@
-/* Extractive Text Weighted for Text Summarization:
-This method ranks sentences based on the frequency of keywords or phrases they contain and the "title"" word score. 
-The "title" is the first 1% of the sentences from the submitted body of texts. The max number of sentences for a "title" is 3.
-Sentences with more frequent words or phrases are considered more important and included in the summary.
-Sentences with words or phrases are considered more important if they appear in the "title".
-It is a simple and efficient approach but may not capture semantic relationships or context as well as other techniques.
+/* Extractive Text Summarization using Keyword Frequency and Title Words:
+This method ranks sentences based on two factors: the frequency of keywords or phrases they contain, and the presence of words from the document's "title" section.
+The "title" is defined as the first few sentences (1% of the total, up to a maximum of 3 sentences) in the input text. Words from these title sentences are considered more important and given additional weight when scoring each sentence.
+Sentences containing more frequent keywords or phrases, as well as words from the title section, are considered more important and included in the summary.
+Additionally, the method incorporates sentiment analysis to adjust the ranking of sentences based on their sentiment scores. Sentences with positive or negative sentiment can receive a ranking boost or penalty, depending on the provided thresholds and boost values.
+While efficient, this approach may not fully capture semantic relationships or context as effectively as more advanced techniques.
 */
 
 const natural = require("natural");
