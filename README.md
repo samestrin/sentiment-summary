@@ -2,7 +2,7 @@
 
 [![Star on GitHub](https://img.shields.io/github/stars/samestrin/sentiment-summary?style=social)](https://github.com/samestrin/sentiment-summary/stargazers) [![Fork on GitHub](https://img.shields.io/github/forks/samestrin/sentiment-summary?style=social)](https://github.com/samestrin/sentiment-summary/network/members) [![Watch on GitHub](https://img.shields.io/github/watchers/samestrin/sentiment-summary?style=social)](https://github.com/samestrin/sentiment-summary/watchers)
 
-![Version 0.0.5](https://img.shields.io/badge/Version-0.0.1-blue) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Built with Node.js](https://img.shields.io/badge/Built%20with-Node.js-green)](https://nodejs.org/)
+![Version 0.0.1](https://img.shields.io/badge/Version-0.0.1-blue) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Built with Node.js](https://img.shields.io/badge/Built%20with-Node.js-green)](https://nodejs.org/)
 
 The **sentiment-summary** npm module generates text summaries that are weighted by the sentiment expressed in individual sentences. It analyzes the sentiment of each sentence within a larger body of text and emphasizes or deemphasizes sentences based on their sentiment scores during the summarization process.
 
