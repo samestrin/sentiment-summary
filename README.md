@@ -11,6 +11,8 @@ This module supports:
 - Seven different summarization algorithms: **Extractive Text, Extractive Text Title Weighted, Latent Semantic Analysis (LSA), Maximum Marginal Relevance (MMR), TextRank, and TextRank with Word Embeddings**.
 - Six different sentiment analysis engines: **Hugging-Face, Natural, Sentiment (AFINN-165 based), sentiment-analysis (AFINN-111 based), VADER, and wink-sentiment**.
 
+_sentiment-summary is not currently under active development._
+
 [https://github.com/samestrin/sentiment-summary](https://github.com/samestrin/sentiment-summary)
 
 ### Summarization Algorithms Supported:
