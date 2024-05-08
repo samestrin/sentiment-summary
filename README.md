@@ -4,7 +4,7 @@
 
 ![Version 0.0.1](https://img.shields.io/badge/Version-0.0.1-blue) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Built with Node.js](https://img.shields.io/badge/Built%20with-Node.js-green)](https://nodejs.org/)
 
-The **sentiment-summary** npm module generates text summaries that are weighted by the sentiment expressed in individual sentences. It analyzes the sentiment of each sentence within a larger body of text and emphasizes or deemphasizes sentences based on their sentiment scores during the summarization process.
+The **sentiment-summary** npm module generates text summaries weighted by the sentiment expressed in individual sentences. It analyzes the sentiment of each sentence within a larger body of text and emphasizes or deemphasizes sentences based on their sentiment scores during the summarization process.
 
 This module supports:
 
