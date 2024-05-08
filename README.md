@@ -19,11 +19,11 @@ _sentiment-summary is under active development._
 
 #### Extractive Text:
 
-This method ranks sentences based on the frequency of keywords or phrases they contain. Sentences with more frequent words or phrases are considered more important and included in the summary. It is a simple and efficient approach but may not capture semantic relationships or context as well as other techniques.
+This method ranks sentences based on the frequency of keywords or phrases they contain. Sentences with more frequent words or phrases are considered more important and included in the summary. It is a simple and efficient approach but may not capture semantic relationships or context, as well as other techniques.
 
 #### Extractive Text Summarization Title Weighted:
 
-This method ranks sentences based on two factors: the frequency of keywords or phrases they contain, and the presence of words from the document's "title" section. The "title" is defined as the first few sentences (1% of the total, up to a maximum of 3 sentences) in the input text. Words from these title sentences are considered more important and given additional weight when scoring each sentence. Sentences containing more frequent keywords or phrases, as well as words from the title section, are considered more important and included in the summary. While efficient, this approach may not fully capture semantic relationships or context as effectively as more advanced techniques.
+This method ranks sentences based on the frequency of keywords or phrases they contain and the presence of words from the document's "title" section. The "title" is the first few sentences (1% of the total, up to a maximum of 3 sentences) in the input text. Words from these title sentences are considered more important and given additional weight when scoring each sentence. Sentences containing more frequent keywords or phrases and words from the title section are considered more important and included in the summary. While efficient, this approach may not fully capture semantic relationships or context as effectively as more advanced techniques.
 
 #### Latent Semantic Analysis (LSA):
 
@@ -35,15 +35,15 @@ LexRank is a graph-based summarization method inspired by the PageRank algorithm
 
 #### Maximum Marginal Relevance (MMR):
 
-MMR is a technique that aims to produce summaries that are both relevant to the original text and diverse in content. It iteratively selects sentences that have high relevance to the document but minimal redundancy with sentences already included in the summary. MMR strikes a balance between relevance and diversity, resulting in summaries that cover the main topics while minimizing repetition.
+MMR is a technique that aims to produce summaries that are relevant to the original text and diverse in content. It iteratively selects sentences that are highly relevant to the document but minimally redundant with sentences already included in the summary. MMR balances relevance and diversity, resulting in summaries covering the main topics while minimizing repetition.
 
 #### TextRank:
 
-TextRank is another graph-based summarization method similar to LexRank. However, instead of using semantic similarity between sentences, TextRank uses co-occurrence relationships between words or phrases to construct the graph. Vertices represent words or phrases, and edges represent co-occurrence links between them. The algorithm computes a centrality score for each word or phrase, and sentences containing the highest-ranked words or phrases are selected for the summary.
+TextRank is another graph-based summarization method similar to LexRank. However, instead of using semantic similarity between sentences, TextRank constructs the graph using co-occurrence relationships between words or phrases. Vertices represent words or phrases, and edges represent co-occurrence links between them. The algorithm computes a centrality score for each word or phrase, and sentences containing the highest-ranked words or phrases are selected for the summary.
 
 #### TextRank with Word Embeddings:
 
-This approach combines the TextRank algorithm with word embeddings, which are dense vector representations of words that capture semantic and syntactic information. Instead of using co-occurrence relationships between words, this method computes sentence similarity using word embeddings. Sentences are represented as vectors by averaging or combining the word embeddings of their constituent words. The TextRank algorithm then operates on these sentence vectors to identify the most important sentences for the summary.
+This approach combines the TextRank algorithm with word embeddings, dense vector representations of words that capture semantic and syntactic information. Instead of using co-occurrence relationships between words, this method computes sentence similarity using word embeddings. Sentences are represented as vectors by averaging or combining the word embeddings of their constituent words. The TextRank algorithm then operates on these sentence vectors to identify the most important sentences for the summary.
 
 ## Installation
 
@@ -53,7 +53,7 @@ npm install sentiment-summary
 
 ## Usage
 
-@todo pending major update
+@todo pending intial release update
 
 ### Hugging Face Support
 
