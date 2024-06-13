@@ -4,44 +4,40 @@
 
 ![Version 0.0.1](https://img.shields.io/badge/Version-0.0.1-blue) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Built with Node.js](https://img.shields.io/badge/Built%20with-Node.js-green)](https://nodejs.org/)
 
-The **sentiment-summary** npm module generates text summaries weighted by the sentiment expressed in individual sentences. It analyzes the sentiment of each sentence within a larger body of text and emphasizes or deemphasizes sentences based on their sentiment scores during the summarization process.
+The **sentiment-summary** npm module generates text summaries weighted by the sentiment expressed in individual sentences. It analyzes the sentiment of each sentence within a larger body of text and emphasizes or deemphasizes sentences based on their sentiment scores during the summarization process. _This is an active project._
 
 This module supports:
 
 - Seven different summarization algorithms: **Extractive Text, Extractive Text Title Weighted, Latent Semantic Analysis (LSA), Maximum Marginal Relevance (MMR), TextRank, and TextRank with Word Embeddings**.
 - Six different sentiment analysis engines: **Hugging-Face, Natural, Sentiment (AFINN-165 based), sentiment-analysis (AFINN-111 based), VADER, and wink-sentiment**.
 
-_sentiment-summary is under active development._
+## Summarization Algorithms Supported:
 
-[https://github.com/samestrin/sentiment-summary](https://github.com/samestrin/sentiment-summary)
+### Extractive Text:
 
-### Summarization Algorithms Supported:
+The Extractive Text method ranks sentences based on the frequency of keywords or phrases they contain. Sentences with more frequent words or phrases are considered more important and included in the summary. It is a simple and efficient approach but may not capture semantic relationships or context, as well as other techniques.
 
-#### Extractive Text:
-
-This method ranks sentences based on the frequency of keywords or phrases they contain. Sentences with more frequent words or phrases are considered more important and included in the summary. It is a simple and efficient approach but may not capture semantic relationships or context, as well as other techniques.
-
-#### Extractive Text Summarization Title Weighted:
+### Extractive Text Summarization Title Weighted:
 
 This method ranks sentences based on the frequency of keywords or phrases they contain and the presence of words from the document's "title" section. The "title" is the first few sentences (1% of the total, up to a maximum of 3 sentences) in the input text. Words from these title sentences are considered more important and given additional weight when scoring each sentence. Sentences containing more frequent keywords or phrases and words from the title section are considered more important and included in the summary. While efficient, this approach may not fully capture semantic relationships or context as effectively as more advanced techniques.
 
-#### Latent Semantic Analysis (LSA):
+### Latent Semantic Analysis (LSA):
 
 LSA is a technique that analyzes the relationships between a set of documents and the terms they contain. It constructs a semantic space where documents and terms are represented as vectors. In the context of text summarization, LSA can identify the most important sentences or passages that capture the core meaning and topics of the original text. It achieves this by finding the sentences with the highest semantic similarity to the overall document vector.
 
-#### LexRank:
+### LexRank:
 
 LexRank is a graph-based summarization method inspired by the PageRank algorithm used in web search engines. It constructs a graph representation of the text, where vertices represent sentences, and edges represent semantic similarity between sentences. The algorithm then computes a centrality score for each sentence, indicating its importance within the text. Highly scored sentences are selected to form the summary, capturing the most salient information.
 
-#### Maximum Marginal Relevance (MMR):
+### Maximum Marginal Relevance (MMR):
 
 MMR is a technique that aims to produce summaries that are relevant to the original text and diverse in content. It iteratively selects sentences that are highly relevant to the document but minimally redundant with sentences already included in the summary. MMR balances relevance and diversity, resulting in summaries covering the main topics while minimizing repetition.
 
-#### TextRank:
+### TextRank:
 
 TextRank is another graph-based summarization method similar to LexRank. However, instead of using semantic similarity between sentences, TextRank constructs the graph using co-occurrence relationships between words or phrases. Vertices represent words or phrases, and edges represent co-occurrence links between them. The algorithm computes a centrality score for each word or phrase, and sentences containing the highest-ranked words or phrases are selected for the summary.
 
-#### TextRank with Word Embeddings:
+### TextRank with Word Embeddings:
 
 This approach combines the TextRank algorithm with word embeddings, dense vector representations of words that capture semantic and syntactic information. Instead of using co-occurrence relationships between words, this method computes sentence similarity using word embeddings. Sentences are represented as vectors by averaging or combining the word embeddings of their constituent words. The TextRank algorithm then operates on these sentence vectors to identify the most important sentences for the summary.
 
@@ -55,7 +51,7 @@ npm install sentiment-summary
 
 @todo pending intial release update
 
-### Hugging Face Support
+## Hugging Face Support
 
 This module comes pre-configured with 24 Hugging Face models that can be used with the Hugging Face sentiment analysis engine. They are grouped into 6 categories:
 
